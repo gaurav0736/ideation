@@ -5,16 +5,16 @@ function change_password_form() { ?>
 	<form action="" method="post" data-parsley-validate="">
         <div class="form-group">
            <label for="current_password">Current Password:</label>           
-              <input id="current_password" type="password" name="current_password" data-parsley-required>        
+              <input id="current_password" type="password" name="current_password" data-parsley-required class="form-control">        
         </div>
         <div class="form-group">
            <label for="first_name">New password:</label>           
-             <input id="new_password" type="password" name="new_password" data-parsley-minlength="6" data-parsley-required>       
+             <input id="new_password" type="password" name="new_password" data-parsley-minlength="6" data-parsley-required class="form-control">               
         </div>
 
         <div class="form-group">
            <label for="confirm_new_password">Confirm password:</label>           
-             <input id="confirm_new_password" type="password" name="confirm_new_password" data-parsley-minlength="6" data-parsley-required data-parsley-equalto="#new_password" >       
+             <input id="confirm_new_password" type="password" name="confirm_new_password" data-parsley-minlength="6" data-parsley-required data-parsley-equalto="#new_password" class="form-control">             
         </div>
         <input type="submit" value="Change Password">
     </form>

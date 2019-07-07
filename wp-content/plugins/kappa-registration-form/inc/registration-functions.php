@@ -53,22 +53,15 @@ class Kappa_registration_form
          // If user is already logged in.
             if ( is_user_logged_in() ) : 
 
-                 wp_redirect( home_url('/my-account/') );
-                 exit;
-                 ?>
-
-                <a id="wp-submit" href="<?php echo wp_logout_url(); ?>" title="Logout">
-                    <?php _e( 'Logout', 'AA' ); ?>
-                </a>
-
-            <?php 
+                 wp_redirect( home_url('/account/') );
+                 exit; 
                 // If user is not logged in.
                 else: 
                 
                     // Login form arguments.
                     $args = array(
                         'echo'           => true,
-                        'redirect'       => site_url( '/my-account' ), 
+                        'redirect'       => site_url( '/account' ), 
                         'form_id'        => 'loginform',
                         'label_username' => __( 'Username' ),
                         'label_password' => __( 'Password' ),
@@ -152,7 +145,7 @@ class Kappa_registration_form
                 <div class="row">
 
                 <div class="form-group col-sm-6">
-                    <input name="reg_city" type="text" class="form-control login-field"
+                    <input name="reg_city" type="text" class="form-control login-field" data-parsley-required data-parsley-length="[2, 100]" 
                            value="<?php echo(isset($_POST['reg_city']) ? $_POST['reg_city'] : null); ?>"
                            placeholder="City" id="reg-city"/>
                     <label class="login-field-icon fui-location" for="reg-city"></label>
@@ -160,7 +153,7 @@ class Kappa_registration_form
                 </div>
 
                  <div class="form-group col-sm-6">
-                    <input name="reg_phone" type="text" class="form-control login-field"
+                    <input name="reg_phone" type="text" class="form-control login-field" data-parsley-required data-parsley-type='digits' data-parsley-length="[6, 16]"
                            value="<?php echo(isset($_POST['reg_phore']) ? $_POST['reg_phore'] : null); ?>"
                            placeholder="Phone No." id="reg-phone"/>
                     <label class="login-field-icon fui-list" for="reg-phone"></label>
@@ -257,8 +250,8 @@ class Kappa_registration_form
             return new WP_Error('area_interest', 'Please select at least one area of interest.');
         }
 
-        if(empty($this->area_interest)){
-            return new WP_Error('area_interest', 'Please select at least one area of interest.');
+        if(empty($this->member_type)){
+            return new WP_Error('area_interest', 'Please select at least one member type.');
         }
 
         if(empty($this->city)){
@@ -306,7 +299,7 @@ class Kappa_registration_form
                 $member_type = implode(', ',$this->member_type);
                 $area_interest = implode(', ',$this->area_interest);
                 add_user_meta($register_user,'city',$city);
-                add_user_meta($register_user,'phonr',$phone);
+                add_user_meta($register_user,'phone',$phone);
                 add_user_meta($register_user,'member_type',esc_attr($member_type));
                 add_user_meta($register_user,'area_interest',esc_attr($area_interest));
 

@@ -265,7 +265,6 @@ require get_template_directory() . '/inc/tgmpa/tgm-plugin-activation.php';
  */
 
 require get_template_directory() . '/inc/custom-functions.php';
-
 /**
  * Register Social Icon menu
  */

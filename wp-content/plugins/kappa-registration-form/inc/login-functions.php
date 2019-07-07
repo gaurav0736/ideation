@@ -4,11 +4,11 @@
 add_action('after_setup_theme', 'remove_admin_bar'); 
 function remove_admin_bar() {
     ob_start();
-	$current_user   = wp_get_current_user();
+	  $current_user   = wp_get_current_user();
     $role_name      = $current_user->roles[0]; 
-	if ('subscriber' === $role_name ) {
-	  show_admin_bar(false);
-	}
+  	if ('subscriber' === $role_name ) {
+  	  show_admin_bar(false);
+  	}
 }
 
 /* redirect wp-admin for subscriber */
@@ -16,21 +16,16 @@ function redirect_users_by_role() {
     $current_user   = wp_get_current_user();
     $role_name      = $current_user->roles[0]; 
     if ( 'subscriber' === $role_name ) {
-        wp_redirect(home_url('/my-account/' ));
+        wp_redirect(home_url('/account/' ));
     }  
 } // redirect_users_by_role
 add_action( 'admin_init', 'redirect_users_by_role' );
 
 /* front page access for subscriber */
 function kp_restrict_access() {
-    global $wp_query;
-    $query_vars = $wp_query->query_vars;
-    // Or restrict by redirecting
-    $restricted_pages = array( 'my-account', 'update-password', 'logout', 'subscription-renew' );
-    if ( !is_user_logged_in() and in_array($query_vars['pagename'], $restricted_pages ))
-       wp_redirect( home_url() ); 
+    if ( !is_user_logged_in())
+       wp_redirect( home_url('/login') ); 
 }
-add_action( 'wp', 'kp_restrict_access' );
 
 
 add_action( 'wp_login_failed', 'my_front_end_login_fail' );  // hook failed login

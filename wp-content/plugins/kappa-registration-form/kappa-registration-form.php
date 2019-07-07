@@ -12,3 +12,4 @@
 include( plugin_dir_path( __FILE__ ) . 'inc/login-functions.php');
 include( plugin_dir_path( __FILE__ ) . 'inc/registration-functions.php');
 include( plugin_dir_path( __FILE__ ) . 'inc/change-password.php');
+include( plugin_dir_path( __FILE__ ) . 'inc/membership-functions.php');
