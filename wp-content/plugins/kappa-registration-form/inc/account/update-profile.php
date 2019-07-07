@@ -1,7 +1,10 @@
 <?php 
 kp_restrict_access();
 get_header();
+
 dashboardSidebar();
+
+
 ?>
 <section id="primary" class="content-area col-sm-12 col-md-8 <?php echo of_get_option( 'site_layout' ); ?>">
 			<main id="main" class="site-main" role="main">
@@ -9,7 +12,7 @@ dashboardSidebar();
 
 				<header class="page-header">
 					<h1 class="page-title">
-						<?php _e( 'Change Password', 'kappa' );
+						<?php _e( 'Update Profile', 'kappa' );
 						?>
 					</h1>
 					
@@ -40,7 +43,7 @@ $settings =   array(
 
  if(empty($_POST['area_interest'])){
            $_SESSION['msg'][] =  'Please select at least one area of interest.';
- }if(empty($_POST['area_interest'])){
+ }if(empty($_POST['member_type'])){
            $_SESSION['msg'][] =  'Please select at least one member type.';
  }if(empty($_POST['city'])){
            $_SESSION['msg'][] =  'Please enter your city.';
@@ -55,8 +58,8 @@ $settings =   array(
         } 
 		else if($width < 220 || $height < 220) {
            $_SESSION['msg'][] =  "Image dimension should be greater than 220 x 200";
-        }else {
-            $filename =  $_FILES['userProfileImage']['name'];
+        }else{
+        	$filename =  $_FILES['userProfileImage']['name'];
             $uploaddir = wp_upload_dir(); // get wordpress upload directory
             $myDirPath = $uploaddir['path'];
             $myDirUrl = $uploaddir['url'];
@@ -86,10 +89,12 @@ $settings =   array(
             $attachimage_url = $uploads['url'].'/'.basename( $filename ) ;
             wp_update_attachment_metadata( $attachment_id, $attach_data );
             update_user_meta($current_user->ID, 'userProfileImage',  $attachment_id); 
+        
         }
       
     }    // Validate file input to check if is with valid extension
     if($_SESSION['msg'] == ''){
+    		
         $first_name = esc_attr(trim($_POST['first_name']));
         $last_name = esc_attr(trim($_POST['last_name']));
         $phone = esc_attr($_POST['phone']);
@@ -102,8 +107,8 @@ $settings =   array(
         update_user_meta($current_user->ID, 'phone', $phone);
         update_user_meta($current_user->ID, 'description', $description);
         update_user_meta($current_user->ID, 'city', $city);
-        update_user_meta($current_user->ID, 'member_type', esc_attr($member_type));
-        update_user_meta($current_user->ID, 'area_interest', esc_attr($area_interest));
+        update_user_meta($current_user->ID, 'member_type', esc_attr($member_type_data));
+        update_user_meta($current_user->ID, 'area_interest', esc_attr($area_interest_data));
         $_SESSION['msg'][] = 'Your profile has been updated successfully.'; 
          //wp_redirect( home_url('/account/') );
        }
@@ -114,11 +119,12 @@ $settings =   array(
        $city = get_user_meta(get_current_user_id(),'city',true); 
        $member_type = get_user_meta(get_current_user_id(),'member_type',true); 
        $area_interest = get_user_meta(get_current_user_id(),'area_interest',true); 
+       $description = get_user_meta(get_current_user_id(),'description',true); 
        $attachment_id = wp_get_attachment_image_src( $profileId, 'full');
 
        if($_POST){
-       	 $member_type_data = $_POST['member_type'];
-         $area_interest_data = $_POST['area_interest'];
+       	 $member_type_data = $_POST['member_type']?$_POST['member_type']:array();
+         $area_interest_data = $_POST['area_interest']?$_POST['area_interest']:array();
        }else{
        	 $member_type_data = explode(', ',$member_type);
          $area_interest_data = explode(', ',$area_interest);
@@ -193,13 +199,14 @@ $settings =   array(
 
                      </div>
                  </div>
-          <div class="form-group col-sm-6">
+          <div class="form-group col-sm-12">
             <label for="userProfileImage">Profile Pic </label>
+            
+            <input type="file" id="userProfileImage" name="userProfileImage" >
             <?php if($attachment_id){ ?>
             <img src="<?php echo $attachment_id['0'] ?>" style="clear: both;height: 100px;width:100px;">
             <?php } ?>
-            <input type="file" id="userProfileImage" name="userProfileImage" >
-			<label style="color:#510000;">Note: Image dimension should be 220 x 220.</label>
+			<label style="color:#510000;">Note: Image dimension should be greater than 220px x 220px.</label>
           </div>
           <div class="form-group col-sm-12">
             <label for="description">About Info</label>           

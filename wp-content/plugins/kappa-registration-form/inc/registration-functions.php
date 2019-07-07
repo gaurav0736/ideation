@@ -320,7 +320,9 @@ class Kappa_registration_form
         wp_enqueue_style('bootstrap-css', plugins_url('../bootstrap/css/bootstrap.css', __FILE__));
         wp_enqueue_style('flat-ui-kit', plugins_url('../css/flat-ui.css', __FILE__));
         wp_enqueue_script('parsley-js', plugins_url('../js/parsley.js', __FILE__));        
+        wp_enqueue_script('custom-js', plugins_url('../js/custom.js', __FILE__));        
         wp_enqueue_style('kappa-css', plugins_url('../css/kappa.css', __FILE__));
+        
 
     }
 
