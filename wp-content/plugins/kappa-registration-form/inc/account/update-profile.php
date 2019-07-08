@@ -132,11 +132,6 @@ $settings =   array(
          $area_interest_data = explode(', ',$area_interest);
        }
 
-
-            if(! empty($_SESSION['loginError']) ) :
-                sessionMsg($_SESSION['loginError']);
-                unset($_SESSION['loginError']);
-            endif;
                 
             if(!empty($_SESSION['msg']) ) :
                 sessionMsg($_SESSION['msg']);

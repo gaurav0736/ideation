@@ -15,10 +15,6 @@ dashboardSidebar();
 					
 				</header><!-- .page-header -->
 				 <?php 
-            if(! empty($_SESSION['loginError']) ) :
-                sessionMsg($_SESSION['loginError']);
-                unset($_SESSION['loginError']);
-            endif;
                 
             if(!empty($_SESSION['msg']) ) :
                 sessionMsg($_SESSION['msg']);
