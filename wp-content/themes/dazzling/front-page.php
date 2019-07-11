@@ -14,6 +14,18 @@
 get_header(); ?>	
 
         <div id="primary" class="content-area col-sm-12 col-md-8">
+             <main id="main" class="site-main" role="main">
+                    <h1 class="entry-title">Latest Ideas</h1>
+                        <?php dazzling_latest_post_type('idea'); ?>
+
+                </main><!-- #main -->
+                <hr>
+                <main id="main" class="site-main" role="main">
+                    <h1 class="entry-title">Startup/MSMEs</h1>
+                        <?php dazzling_latest_post_type('startup'); ?>
+
+                </main><!-- #main -->
+                <hr>
                 <main id="main" class="site-main" role="main">
                     <h1 class="entry-title">Latest Blog</h1>
                         <?php dazzling_latest_post_type('post'); ?>

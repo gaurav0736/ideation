@@ -12,7 +12,7 @@ dashboardSidebar();
 
 				<header class="page-header">
 					<h1 class="page-title">
-						<?php _e( 'Ideas List', 'kappa' );
+						<?php _e( 'Projects List', 'kappa' );
 						?>
 					</h1>
 					
@@ -26,7 +26,7 @@ dashboardSidebar();
            
 				?>
 				<div align="right">
-					<a class="btn btn-default" href="<?php echo site_url(); ?>/edit-idea">Add New Idea</a>
+					<a class="btn btn-default" href="<?php echo site_url(); ?>/edit-project">Add New Project</a>
 				</div>
 
 				<hr>
@@ -34,11 +34,11 @@ dashboardSidebar();
 	<table class="table" >
 		<tr>
 			<th>S.No.</th>
-			<th>Idea Title</th>
+			<th>Project Title</th>
 			<th>Action</th>
 		</tr>
 
-		<?php  $query = new WP_Query( array( 'post_type' => 'idea', 'posts_per_page' => '-1','author'=>get_current_user_id() ) );
+		<?php  $query = new WP_Query( array( 'post_type' => 'project', 'posts_per_page' => '-1','author'=>get_current_user_id() ) );
 
             if ($query->have_posts()) :
             	$x =1;
@@ -48,7 +48,7 @@ dashboardSidebar();
 		<tr id="<?=get_the_ID();?>">
 			<td><?=$x?>.</td>
 			<td><?=get_the_title()?></td>
-			<td><a href="<?php echo site_url(); ?>/edit-idea/<?=get_the_ID()?>"><i class="fa fa-pencil"></i></a> <a href="javascript:void(0);" class="delete" data-id="<?=get_the_ID();?>" onclick="deletethis('<?=get_the_ID();?>')"><i class="fa fa-trash"></i></a> </td>
+			<td><a href="<?php echo site_url(); ?>/edit-project/<?=get_the_ID()?>"><i class="fa fa-pencil"></i></a> <a href="javascript:void(0);" class="delete" data-id="<?=get_the_ID();?>" onclick="deletethis('<?=get_the_ID();?>')"><i class="fa fa-trash"></i></a> </td>
 		</tr>
 	<?php $x++; endwhile;
 	endif; ?>

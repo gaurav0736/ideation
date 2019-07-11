@@ -4,7 +4,7 @@ get_header();
 
 dashboardSidebar();
 
-$id =esc_attr(get_query_var('edit-idea'));
+$id =esc_attr(get_query_var('edit-project'));
 ?>
 <section id="primary" class="content-area col-sm-12 col-md-8 <?php echo of_get_option( 'site_layout' ); ?>">
 			<main id="main" class="site-main" role="main">
@@ -15,10 +15,10 @@ $id =esc_attr(get_query_var('edit-idea'));
 
 						<?php
 						if($id){
-							_e( 'Edit Idea', 'kappa' );
+							_e( 'Edit Project', 'kappa' );
 	
 						}else{
-							 _e( 'Create Idea', 'kappa' );
+							 _e( 'Create Project', 'kappa' );
 						
 						}
 						?>
@@ -99,6 +99,7 @@ $settings =   array(
       
     }    // Validate file input to check if is with valid extension
     if($_SESSION['msg'] == ''){  
+       $project_span = wp_strip_all_tags($_POST['project_span']);
     	if($id){
     		$my_post = array(
     		  'ID'           => $id,
@@ -106,13 +107,21 @@ $settings =   array(
 			  'post_content'  => $_POST['description'],
 			  'post_status'   => 'publish',
 			  'post_author'   => get_current_user_id(),
-			  'post_type'	  => 'idea',
+			  'post_type'	  => 'project',
 			);
 	           
 			// Insert the post into the database
 			$insertpost = wp_update_post( $my_post );
 
-	        $_SESSION['msg'][] = 'Your idea has been updated successfully.';
+      update_post_meta($insertpost, 'project_span',  $project_span); 
+
+      delete_post_meta($insertpost, 'project_users');
+      foreach($_POST['project_users'] as $users){
+        add_post_meta($insertpost, 'project_users',  esc_attr($users)); 
+      }
+      
+
+	        $_SESSION['msg'][] = 'Your project has been updated successfully.';
 			//update_post_meta($insertpost, '_thumbnail_id',  $attachment_id);		
 	    
     	}else{
@@ -121,16 +130,21 @@ $settings =   array(
 			  'post_content'  => $_POST['description'],
 			  'post_status'   => 'publish',
 			  'post_author'   => get_current_user_id(),
-			  'post_type'	  => 'idea',
+			  'post_type'	  => 'project',
 			);
 	           
 			// Insert the post into the database
 			$insertpost = wp_insert_post( $my_post );
-			update_post_meta($insertpost, '_thumbnail_id',  $attachment_id);		
-	        $_SESSION['msg'][] = 'Your idea has been created successfully.';
+			update_post_meta($insertpost, '_thumbnail_id',  $attachment_id);       
+      update_post_meta($insertpost, 'project_span',  $project_span); 
+      foreach($_POST['project_users'] as $users){
+        add_post_meta($insertpost, 'project_users',  esc_attr($users)); 
+      }		
+	        $_SESSION['msg'][] = 'Your project has been created successfully.';
     	}
 
-         wp_redirect( home_url('/idealist/') );
+
+         wp_redirect( home_url('/project-list/') );
          exit;
        }
 }
@@ -139,16 +153,17 @@ $settings =   array(
  if($id){
  	$post = get_post($id);
  	if(get_current_user_id() != $post->post_author){
-    	wp_redirect( home_url('/idealist/') );
+    	wp_redirect( home_url('/project-list/') );
     	exit;
   	}
  	$thumbnail_id = get_post_meta($id,'_thumbnail_id',true);
  	$attachment_id = wp_get_attachment_image_src( $thumbnail_id, 'medium');
  	$description = $post->post_content;
  	$post_title = get_the_title($id);
+  $project_span =  get_post_meta($id, 'project_span', true);  
+  $project_users = get_post_meta($id,'project_users');
+ 
  }
-
-      
             if(!empty($_SESSION['msg']) ) :
                 sessionMsg($_SESSION['msg']);
                 unset($_SESSION['msg']);
@@ -169,8 +184,37 @@ $settings =   array(
 			<label style="color:#510000;">Note: Image dimension should be greater than 220px x 220px.</label>
           </div>
           <div class="form-group col-sm-12">
-            <label for="description">About Info</label>           
+            <label for="description">Your Idea</label>           
              <?php wp_editor(  $description, 'description', $settings ); ?>
+          </div>
+           <div class="form-group col-sm-6">
+            <label for="project_span">Estimated Span of Project</label>
+            <input type="text" class="form-control" value="<?php if($_POST['project_span']!= ''){ echo stripslashes($_POST['project_span']);}else{ echo $project_span; } ?>" name="project_span" id="project_span" data-parsley-required />
+          </div>
+          <div class="form-group col-sm-6">
+            <label for="project_span">Teammate</label>
+            <select name="project_users[]" id="project_users" class="form-control" multiple="multiple" data-parsley-required >
+                 <?php $args2 = array(
+                            'role'    => 'subscriber',
+                            'order'   => 'ASC'
+                            );
+                  $users = get_users( $args2 );
+                  foreach($users as $user){
+                      if(in_array($users->ID,$_POST['project_users'])){
+                        $selected='selected="selected"';
+                      }elseif(in_array($user->ID,$project_users)){
+                        $selected='selected="selected"';
+                      }else{
+                        $selected = '';
+                      }
+
+
+                    echo '<option '.$selected.' value="'.$user->ID.'">'.$user->first_name.' '.$user->last_name.'</option>';
+                  }
+
+
+                   ?>
+            </select>           
           </div>
           <div class="form-group col-sm-12">
           <input id="submit" type="submit" name="submit" value="Submit" >
@@ -184,7 +228,13 @@ $settings =   array(
 </main>
 
 
-
+<script type="text/javascript">
+  jQuery('option').mousedown(function(e) {
+    e.preventDefault();
+    jQuery(this).prop('selected', !jQuery(this).prop('selected'));
+    return false;
+});
+</script>
 
 <?php
 get_footer();

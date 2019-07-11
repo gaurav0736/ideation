@@ -4,7 +4,7 @@ get_header();
 
 dashboardSidebar();
 
-$id =esc_attr(get_query_var('edit-idea'));
+$id =esc_attr(get_query_var('edit-startup'));
 ?>
 <section id="primary" class="content-area col-sm-12 col-md-8 <?php echo of_get_option( 'site_layout' ); ?>">
 			<main id="main" class="site-main" role="main">
@@ -15,10 +15,10 @@ $id =esc_attr(get_query_var('edit-idea'));
 
 						<?php
 						if($id){
-							_e( 'Edit Idea', 'kappa' );
+							_e( 'Edit Startup', 'kappa' );
 	
 						}else{
-							 _e( 'Create Idea', 'kappa' );
+							 _e( 'Create Startup/MSME', 'kappa' );
 						
 						}
 						?>
@@ -53,6 +53,9 @@ $settings =   array(
 
  if(empty($_POST['post_title'])){
            $_SESSION['msg'][] =  'Please enter idea title.';
+ }
+  if(empty($_POST['_founder'])){
+           $_SESSION['msg'][] =  'Please enter founder/co-founders.';
  }
     $file_extension = pathinfo($_FILES["thumbnail_image"]["name"], PATHINFO_EXTENSION);
     if (file_exists($_FILES["thumbnail_image"]["tmp_name"])) {
@@ -99,6 +102,7 @@ $settings =   array(
       
     }    // Validate file input to check if is with valid extension
     if($_SESSION['msg'] == ''){  
+      $founder = wp_strip_all_tags($_POST['_founder']);
     	if($id){
     		$my_post = array(
     		  'ID'           => $id,
@@ -106,11 +110,12 @@ $settings =   array(
 			  'post_content'  => $_POST['description'],
 			  'post_status'   => 'publish',
 			  'post_author'   => get_current_user_id(),
-			  'post_type'	  => 'idea',
+			  'post_type'	  => 'startup',
 			);
 	           
 			// Insert the post into the database
 			$insertpost = wp_update_post( $my_post );
+      update_post_meta($insertpost, '_founder',  $founder);
 
 	        $_SESSION['msg'][] = 'Your idea has been updated successfully.';
 			//update_post_meta($insertpost, '_thumbnail_id',  $attachment_id);		
@@ -121,16 +126,17 @@ $settings =   array(
 			  'post_content'  => $_POST['description'],
 			  'post_status'   => 'publish',
 			  'post_author'   => get_current_user_id(),
-			  'post_type'	  => 'idea',
+			  'post_type'	  => 'startup',
 			);
 	           
 			// Insert the post into the database
 			$insertpost = wp_insert_post( $my_post );
-			update_post_meta($insertpost, '_thumbnail_id',  $attachment_id);		
+			update_post_meta($insertpost, '_thumbnail_id',  $attachment_id);
+      update_post_meta($insertpost, '_founder',  $founder);		
 	        $_SESSION['msg'][] = 'Your idea has been created successfully.';
     	}
 
-         wp_redirect( home_url('/idealist/') );
+         wp_redirect( home_url('/startup-list/') );
          exit;
        }
 }
@@ -138,11 +144,12 @@ $settings =   array(
 
  if($id){
  	$post = get_post($id);
- 	if(get_current_user_id() != $post->post_author){
-    	wp_redirect( home_url('/idealist/') );
-    	exit;
-  	}
+  if(get_current_user_id() != $post->post_author){
+      wp_redirect( home_url('/startup-list/') );
+      exit;
+    }
  	$thumbnail_id = get_post_meta($id,'_thumbnail_id',true);
+  $founder = get_post_meta($id,'_founder',true);
  	$attachment_id = wp_get_attachment_image_src( $thumbnail_id, 'medium');
  	$description = $post->post_content;
  	$post_title = get_the_title($id);
@@ -156,8 +163,12 @@ $settings =   array(
              ?>
           <form method="post" id="updateForm" method="post"  data-parsley-validate="" enctype="multipart/form-data">
           <div class="form-group col-sm-12">
-            <label for="post_title">Subject</label>
+            <label for="post_title">Startup/MSMEs Title</label>
             <input type="text" class="form-control" value="<?php if($_POST['post_title']!= ''){ echo stripslashes($_POST['post_title']);}else{ echo $post_title; } ?>" name="post_title" id="post_title" data-parsley-required />
+          </div>
+          <div class="form-group col-sm-12">
+            <label for="post_title">List of founders/co-founders</label>
+            <textarea name="_founder" id="founder" rows="3" class="form-control" data-parsley-required ><?php if($_POST['_founder']!= ''){ echo $_POST['_founder'];}else{ echo $founder; } ?></textarea>
           </div>
           <div class="form-group col-sm-12">
             <label for="thumbnail_image">Profile Pic </label>
@@ -169,7 +180,7 @@ $settings =   array(
 			<label style="color:#510000;">Note: Image dimension should be greater than 220px x 220px.</label>
           </div>
           <div class="form-group col-sm-12">
-            <label for="description">About Info</label>           
+            <label for="description">Product or service details</label>           
              <?php wp_editor(  $description, 'description', $settings ); ?>
           </div>
           <div class="form-group col-sm-12">

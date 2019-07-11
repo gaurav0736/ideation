@@ -102,15 +102,21 @@ $settings =   array(
         $phone = esc_attr($_POST['phone']);
         $city = esc_attr($_POST['city']);
         $description = $_POST['description'];
-        $member_type_data = implode(', ',$_POST['member_type']);
-        $area_interest_data = implode(', ',$_POST['area_interest']);
+       /* $member_type_data = implode(', ',$_POST['member_type']);
+        $area_interest_data = implode(', ',$_POST['area_interest']);*/
         update_user_meta($current_user->ID, 'first_name', $first_name); 
         update_user_meta($current_user->ID, 'last_name', $last_name);
         update_user_meta($current_user->ID, 'phone', $phone);
         update_user_meta($current_user->ID, 'description', $description);
+        delete_user_meta($current_user->ID,'member_type');
+        delete_user_meta($current_user->ID,'area_interest');
         update_user_meta($current_user->ID, 'city', $city);
-        update_user_meta($current_user->ID, 'member_type', esc_attr($member_type_data));
-        update_user_meta($current_user->ID, 'area_interest', esc_attr($area_interest_data));
+        foreach($_POST['member_type'] as $member){
+                    add_user_meta($current_user->ID,'member_type',esc_attr($member));
+                }
+                foreach($_POST['area_interest'] as $area){
+                    add_user_meta($current_user->ID,'area_interest',esc_attr($area));
+                }
         $_SESSION['msg'][] = 'Your profile has been updated successfully.'; 
          //wp_redirect( home_url('/account/') );
        }
@@ -119,8 +125,8 @@ $settings =   array(
        $profileId = get_user_meta(get_current_user_id(),'userProfileImage',true); 
        $phone = get_user_meta(get_current_user_id(),'phone',true); 
        $city = get_user_meta(get_current_user_id(),'city',true); 
-       $member_type = get_user_meta(get_current_user_id(),'member_type',true); 
-       $area_interest = get_user_meta(get_current_user_id(),'area_interest',true); 
+       $member_type = get_user_meta(get_current_user_id(),'member_type'); 
+       $area_interest = get_user_meta(get_current_user_id(),'area_interest'); 
        $description = get_user_meta(get_current_user_id(),'description',true); 
        $attachment_id = wp_get_attachment_image_src( $profileId, 'full');
 
@@ -128,8 +134,8 @@ $settings =   array(
        	 $member_type_data = $_POST['member_type']?$_POST['member_type']:array();
          $area_interest_data = $_POST['area_interest']?$_POST['area_interest']:array();
        }else{
-       	 $member_type_data = explode(', ',$member_type);
-         $area_interest_data = explode(', ',$area_interest);
+       	 $member_type_data = $member_type;
+         $area_interest_data = $area_interest;
        }
 
                 

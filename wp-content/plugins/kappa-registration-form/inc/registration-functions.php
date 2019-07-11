@@ -296,15 +296,18 @@ class Kappa_registration_form
             if (!is_wp_error($register_user)) {
                 $city = esc_attr($this->city);
                 $phone = esc_attr($this->phone);
-                $member_type = implode(', ',$this->member_type);
-                $area_interest = implode(', ',$this->area_interest);
+                foreach($this->member_type as $member){
+                    add_user_meta($register_user,'member_type',esc_attr($member));
+                }
+                foreach($this->area_interest as $area){
+                    add_user_meta($register_user,'area_interest',esc_attr($area));
+                }
+                
                 add_user_meta($register_user,'city',$city);
                 add_user_meta($register_user,'phone',$phone);
-                add_user_meta($register_user,'member_type',esc_attr($member_type));
-                add_user_meta($register_user,'area_interest',esc_attr($area_interest));
 
                 echo '<div style="margin-bottom: 6px" class="btn btn-block btn-lg btn-danger">';
-                echo '<strong>Registration complete. Go to <a href="' . wp_login_url() . '">login page</a></strong>';
+                echo '<strong>Registration complete. Go to <a href="' . site_url().'/login' . '">login page</a></strong>';
                 echo '</div>';
             } else {
                 echo '<div style="margin-bottom: 6px" class="btn btn-block btn-lg btn-danger">';
