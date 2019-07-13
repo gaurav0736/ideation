@@ -16,35 +16,46 @@ get_header(); ?>
         <div id="primary" class="content-area col-sm-12 col-md-8">
              <main id="main" class="site-main" role="main">
                     <h1 class="entry-title">Latest Ideas</h1>
-                        <?php dazzling_latest_post_type('idea'); ?>
+                        <?php dazzling_latest_post_type('idea','3'); ?>
+
+                </main><!-- #main -->
+                <hr>
+                <main id="main" class="site-main" role="main">
+                    <h1 class="entry-title">Projects</h1>
+                        <?php dazzling_latest_post_type('project','3'); ?>
 
                 </main><!-- #main -->
                 <hr>
                 <main id="main" class="site-main" role="main">
                     <h1 class="entry-title">Startup/MSMEs</h1>
-                        <?php dazzling_latest_post_type('startup'); ?>
+                        <?php dazzling_latest_post_type('startup','3'); ?>
 
                 </main><!-- #main -->
                 <hr>
+
+            </div>
+            <?php get_sidebar(); ?>
+            <div class="clearfix"></div>
+            <div id="primary" class="content-area col-sm-12 col-md-12">
                 <main id="main" class="site-main" role="main">
                     <h1 class="entry-title">Latest Blog</h1>
-                        <?php dazzling_latest_post_type('post'); ?>
+                        <?php dazzling_latest_post_type('post','6'); ?>
 
                 </main><!-- #main -->
                 <hr>
                  <main id="main" class="site-main" role="main">
                     <h1 class="entry-title">Latest Events</h1>
-                        <?php dazzling_latest_post_type('event'); ?>
+                        <?php dazzling_latest_post_type('event','6'); ?>
 
                 </main><!-- #main -->
                 <hr>
                  <main id="main" class="site-main" role="main">
                     <h1 class="entry-title">Latest News</h1>
-                        <?php dazzling_latest_post_type('news'); ?>
+                        <?php dazzling_latest_post_type('news','6'); ?>
 
                 </main><!-- #main -->
                 <hr>
         </div><!-- #primary -->
 
-<?php get_sidebar(); ?>
+
 <?php get_footer(); ?>

@@ -21,8 +21,21 @@ get_header(); ?>
 			<?php dazzling_posted_on(); ?>
 		</div><!-- .entry-meta -->
 	</header><!-- .entry-header -->
-
+	<div class="founders">
+		<h3>Estimated Span of Project</h3> <?=get_post_meta(get_the_ID(),'project_span',true);?>
+		<hr>
+		<h3>Team mate</h3>
+		<ul>
+		 	<?php $users = get_post_meta(get_the_ID(),'project_users');
+				foreach($users as $user_id){
+					echo '<li>'.get_user_meta($user_id,'first_name',true).' '.get_user_meta($user_id,'last_name',true).'</li>';
+				}
+			?>
+		</ul>
+		<hr>
+	</div>
 	<div class="entry-content">
+		<h3>Idea</h3>
 		<?php echo get_the_content(); ?>
 		
 	</div><!-- .entry-content -->
@@ -36,12 +49,7 @@ get_header(); ?>
 	</footer><!-- .entry-meta -->
 </article><!-- #post-## -->
 
-			<?php
-				// If comments are open or we have at least one comment, load up the comment template
-				
-					comments_template();
-				
-			?>
+			
 
 		<?php endwhile; // end of the loop. ?>
 

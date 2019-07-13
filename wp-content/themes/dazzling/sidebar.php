@@ -15,9 +15,10 @@
 				<h1 class="widget-title"><?php _e( 'Links', 'dazzling' ); ?></h1>
 				<ul>
 					<li><a href="<?php echo site_url().'/join-us'; ?>">Join Us</a></li>
-					<li>Submit your IDEA</li>
-					<li>Start developing</li>
-					<li>Start your start-up/MSME dream</li>
+					<li><a href="<?php echo site_url().'/idealist'; ?>">Submit your IDEA</a></li>
+					<li><a href="<?php echo site_url().'/project-list'; ?>">Start developing</a></li>
+					<li><a href="<?php echo site_url().'/startup-list'; ?>">Start your start-up/MSME dream</a></li>
+					<li><a href="<?php echo site_url().'/people'; ?>">Our Members</a></li>
 					<li><a href="<?php echo get_permalink( get_option( 'page_for_posts' ) ); ?>">Our Blog</a></li>
 				</ul>
 			</aside>

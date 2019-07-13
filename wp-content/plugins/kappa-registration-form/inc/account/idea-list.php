@@ -35,6 +35,7 @@ dashboardSidebar();
 		<tr>
 			<th>S.No.</th>
 			<th>Idea Title</th>
+			<th>Status</th>
 			<th>Action</th>
 		</tr>
 
@@ -43,11 +44,19 @@ dashboardSidebar();
             if ($query->have_posts()) :
             	$x =1;
               while ($query->have_posts()) : $query->the_post();
+              	$status = get_post_meta(get_the_ID(),'status',true);
+              	if($status!='completed'){
+              		$status = 'New Idea';
+              	}else{
+              		$status = 'Finalised Idea';
+              	}
+
 
 		 ?>
 		<tr id="<?=get_the_ID();?>">
 			<td><?=$x?>.</td>
 			<td><?=get_the_title()?></td>
+			<td><?=$status?></td>
 			<td><a href="<?php echo site_url(); ?>/edit-idea/<?=get_the_ID()?>"><i class="fa fa-pencil"></i></a> <a href="javascript:void(0);" class="delete" data-id="<?=get_the_ID();?>" onclick="deletethis('<?=get_the_ID();?>')"><i class="fa fa-trash"></i></a> </td>
 		</tr>
 	<?php $x++; endwhile;

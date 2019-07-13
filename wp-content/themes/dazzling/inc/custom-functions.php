@@ -29,23 +29,30 @@ add_action( 'init', 'news_post_type' );
 
 
 
-function dazzling_latest_post_type($post_type) {
+function dazzling_latest_post_type($post_type,$post_count='3') {
      
-            $query = new WP_Query( array( 'post_type' => $post_type, 'posts_per_page' => '3' ) );
+            $query = new WP_Query( array( 'post_type' => $post_type, 'posts_per_page' => $post_count ) );
+            if($post_count == '3'){
+              $div = '4';
+            }else{
+              $div='3';
+            }
 //            print_r($query);
             if ($query->have_posts()) :
             	 echo '<div class="row">';
               while ($query->have_posts()) : $query->the_post();
-              	echo '<div class="card col-sm-4">';
+              	echo '<div class="col-sm-'.$div.'"><div class="card ">';
                 if ( has_post_thumbnail() ) { // Check if the post has a featured image assigned to it.
-                  echo '  <img src="'.get_the_post_thumbnail_url('','dazzling-featured').'" alt="Avatar" style="width:100%">';
+                  echo '  <img class="img-responsive" src="'.get_the_post_thumbnail_url('','dazzling-featured').'" alt="Avatar" style="width:100%">';
+                }else{
+                  echo '  <img class="img-responsive" src="'.get_template_directory_uri().'/img/noimage-1.png" alt="Avatar">';
                 }
                 echo '<div class="card_content">';
                   echo '<a href="'. get_permalink() .'">';
                     if ( get_the_title() != '' ) echo '<h4>'. wp_trim_words(get_the_title(),5).'</h4>';
                   echo '</a>';
                 echo '</div>';
-                 echo '</div>';
+                 echo '</div></div>';
                 endwhile;
 
      			 echo ' </div>';

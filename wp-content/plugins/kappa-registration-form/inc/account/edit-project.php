@@ -114,6 +114,7 @@ $settings =   array(
 			$insertpost = wp_update_post( $my_post );
 
       update_post_meta($insertpost, 'project_span',  $project_span); 
+      update_post_meta($insertpost, 'status',  wp_strip_all_tags($_POST['status']));  
 
       delete_post_meta($insertpost, 'project_users');
       foreach($_POST['project_users'] as $users){
@@ -137,6 +138,7 @@ $settings =   array(
 			$insertpost = wp_insert_post( $my_post );
 			update_post_meta($insertpost, '_thumbnail_id',  $attachment_id);       
       update_post_meta($insertpost, 'project_span',  $project_span); 
+      update_post_meta($insertpost, 'status',  wp_strip_all_tags($_POST['status']));  
       foreach($_POST['project_users'] as $users){
         add_post_meta($insertpost, 'project_users',  esc_attr($users)); 
       }		
@@ -162,7 +164,7 @@ $settings =   array(
  	$post_title = get_the_title($id);
   $project_span =  get_post_meta($id, 'project_span', true);  
   $project_users = get_post_meta($id,'project_users');
- 
+  $status = get_post_meta($id,'status', true);
  }
             if(!empty($_SESSION['msg']) ) :
                 sessionMsg($_SESSION['msg']);
@@ -215,6 +217,14 @@ $settings =   array(
 
                    ?>
             </select>           
+          </div>
+           <div class="form-group col-sm-12">
+            <label for="description">Status</label>  
+            <select name="status" id="status" class="form-control" >
+
+              <option  <?php if($_POST['status'] == 'new'){ echo 'selected="selected"';}else if($status == 'new'){ echo 'selected="selected"';} ?> value="new">New Project</option>
+              <option <?php if($_POST['status'] == 'completed'){ echo 'selected="selected"';}else if($status == 'completed'){ echo 'selected="selected"';} ?> value="completed">Completed Project</option>
+            </select>
           </div>
           <div class="form-group col-sm-12">
           <input id="submit" type="submit" name="submit" value="Submit" >

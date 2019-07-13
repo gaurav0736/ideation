@@ -111,7 +111,7 @@ $settings =   array(
 	           
 			// Insert the post into the database
 			$insertpost = wp_update_post( $my_post );
-
+      update_post_meta($insertpost, 'status',  wp_strip_all_tags($_POST['status']));  
 	        $_SESSION['msg'][] = 'Your idea has been updated successfully.';
 			//update_post_meta($insertpost, '_thumbnail_id',  $attachment_id);		
 	    
@@ -126,7 +126,8 @@ $settings =   array(
 	           
 			// Insert the post into the database
 			$insertpost = wp_insert_post( $my_post );
-			update_post_meta($insertpost, '_thumbnail_id',  $attachment_id);		
+			update_post_meta($insertpost, '_thumbnail_id',  $attachment_id);	
+      update_post_meta($insertpost, 'status',  wp_strip_all_tags($_POST['status']));  	
 	        $_SESSION['msg'][] = 'Your idea has been created successfully.';
     	}
 
@@ -146,6 +147,7 @@ $settings =   array(
  	$attachment_id = wp_get_attachment_image_src( $thumbnail_id, 'medium');
  	$description = $post->post_content;
  	$post_title = get_the_title($id);
+  $status = get_post_meta($id,'status', true);
  }
 
       
@@ -171,6 +173,14 @@ $settings =   array(
           <div class="form-group col-sm-12">
             <label for="description">About Info</label>           
              <?php wp_editor(  $description, 'description', $settings ); ?>
+          </div>
+           <div class="form-group col-sm-12">
+            <label for="description">Status</label>  
+            <select name="status" id="status" class="form-control" >
+
+              <option  <?php if($_POST['status'] == 'new'){ echo 'selected="selected"';}else if($status == 'new'){ echo 'selected="selected"';} ?> value="new">New Idea</option>
+              <option <?php if($_POST['status'] == 'completed'){ echo 'selected="selected"';}else if($status == 'completed'){ echo 'selected="selected"';} ?> value="completed">Finalised Idea</option>
+            </select>
           </div>
           <div class="form-group col-sm-12">
           <input id="submit" type="submit" name="submit" value="Submit" >

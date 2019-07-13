@@ -7,15 +7,41 @@ function idea_post_type() {
         'label'     => __( 'Ideas', 'kappa' ),
         'menu_icon' => 'dashicons-book',
         'supports'=> array( 'title', 'editor', 'thumbnail','comments' ),
-        'rewrite' => array('slug' => 'idea'),
-
+        'rewrite' => array('slug' => 'ideas'),
+        'has_archive' => true
     );
     register_post_type( 'idea', $args );
 }
 add_action( 'init', 'idea_post_type' );
 
 
+function your_prefix_get_meta_box( $meta_boxes ) {
+	
 
+	$meta_boxes[] = array(
+		'id' => 'additional',
+		'title' => esc_html__( 'Additional Details', 'metabox-online-generator' ),
+		'post_types' => array('idea' ),
+		'context' => 'side',
+		'priority' => 'default',
+		'autosave' => 'false',
+		'fields' => array(
+			array(
+				'id' => 'status',
+				'name' => esc_html__( 'Status', 'metabox-online-generator' ),
+				'type' => 'select_advanced',
+				'options' => array(
+					'new' => 'New Idea',
+					'completed' => 'Finalides Idea',
+				),
+				'std' => 'new',
+			),
+		),
+	);
+
+	return $meta_boxes;
+}
+add_filter( 'rwmb_meta_boxes', 'your_prefix_get_meta_box' );
 
 function startup_post_type() {
     $args = array(
@@ -24,6 +50,7 @@ function startup_post_type() {
         'menu_icon' => 'dashicons-book',
         'supports'=> array( 'title', 'editor', 'thumbnail' ),
         'rewrite' => array('slug' => 'startup'),
+        'has_archive' => true
 
     );
     register_post_type( 'startup', $args );
@@ -64,6 +91,7 @@ function teammate_post_type() {
         'menu_icon' => 'dashicons-book',
         'supports'=> array( 'title','editor'  ),
         'rewrite' => array('slug' => 'teammate'),
+        'has_archive' => true
 
     );
     register_post_type( 'teammate', $args );
@@ -136,6 +164,7 @@ function project_post_type() {
         'menu_icon' => 'dashicons-book',
         'supports'=> array( 'title','editor' ,'thumbnail' ),
         'rewrite' => array('slug' => 'projects'),
+        'has_archive' => true
 
     );
     register_post_type( 'project', $args );
@@ -163,6 +192,16 @@ function project_get_meta_box( $meta_boxes ) {
 				'id' =>  'project_span',
 				'type' => 'text',
 				'name' => esc_html__( 'Time Span', 'metabox-online-generator' ),
+			),
+			array(
+				'id' => 'status',
+				'name' => esc_html__( 'Status', 'metabox-online-generator' ),
+				'type' => 'select_advanced',
+				'options' => array(
+					'new' => 'New Project',
+					'completed' => 'Completed Project',
+				),
+				'std' => 'new',
 			),
 		),
 	);

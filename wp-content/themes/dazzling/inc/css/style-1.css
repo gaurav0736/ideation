@@ -12,6 +12,7 @@
 /* Add some padding inside the card container */
 .card .card_content {
   padding: 2px 16px;
+  background-color:  #f7f7f7;;
 }
 
 .login-form .login-field-icon {
@@ -19,3 +20,8 @@
 }
 
 .login_checkbox{ padding:0px 5px 0px 15px; }
+
+
+footer {
+    background-color: #fff;
+ }
